@@ -13,7 +13,7 @@ Geo::Dymaxion - Plot latitude/longitude on a Fuller Dymaxion(tm) map
 
   my $map = Geo::Dymaxion->new( 800, 600 );
 
-  # Find the x and y coordinates in pixels of Philadelpha, PA, USA
+  # Find the x and y coordinates in pixels of Philadelphia, PA, USA.
 
   my ($x, $y) = $map->plot( 40, -75 );
 
@@ -53,7 +53,7 @@ C<plot> takes a floating-point (lat, long) pair, and returns a list
 consisting of floating-point (x, y) coordinates, scaled to the width and
 height provided to C<new()>. Latitudes south of the equator and longitudes
 west of the prime meridian should be expressed as negative values. These
-X and Y values can then be plugged into C<<Imager->setpixel()>> or any
+X and Y values can then be plugged into C<Imager-E<gt>setpixel()> or any
 other drawing module you'd care to use.
 
 =back
@@ -72,10 +72,58 @@ is 5.5 by sqrt(7.75) unit triangle edges in size.
 
 =back 
 
+=head1 EXAMPLE
+
+  # This script takes a Dymaxion map and (lat, long) point and
+  # outputs a JPEG of the map with a large red dot over that point.
+  #
+  # For a more elaborate example of the same, see:
+  #    http://iconocla.st/hacks/dymax/
+  
+  use Imager;
+  use Imager::Fill;
+  use Geo::Dymaxion;
+  use strict;
+  
+  my ($lat, $long) = @ARGV;
+  my $map_file = "dymaxion.gif"; # make sure the margins are trimmed!
+
+  my $map = Imager->new;
+  $map->open( file => $map_file );
+  
+  my $dymax = Geo::Dymaxion->new( $map->getwidth, $map->getheight );
+  my ($x, $y) = $dymax->plot( $lat, $long );
+  
+  my $dot  = Imager::Color->new( 255, 0, 0 );
+  my $fill = Imager::Fill->new( solid => $dot );
+  $map->circle( fill => $fill, r => 5, x => $x, y => $y );
+  
+  $map->write( type => "jpeg", fd => fileno(STDOUT) )
+      or die $map->errstr;
+  
 =head1 BUGS
 
 It would be really cool if this module could convert (x, y) points on
 a Fuller projection back into (lat, long).
+
+=head1 DESIDERATA
+
+"Think of it. We are blessed with technology that would be indescribable
+to our forefathers. We have the wherewithal, the know-it-all to feed
+everybody, clothe everybody, and give every human on Earth a chance. We
+know now what we could never have known before-that we now have the
+option for all humanity to "make it" successfully on this planet in this
+lifetime. Whether it is to be Utopia or Oblivion will b a touch-and-go
+relay race right up to the final moment."
+    - R. Buckminster Fuller
+
+"When I am working on a problem,
+I never think about beauty.
+I only think about how to solve the problem.
+But when I have finished,
+if the solution is not beautiful,
+I know it is wrong."
+    - R. Buckminster Fuller
 
 =head1 SEE ALSO
 
@@ -88,6 +136,8 @@ determining the calculations necessary to plot latitude and longitude
 on a Fuller map. Gray's notes and original code are available at
 L<http://www.rwgrayprojects.com/rbfnotes/maps/graymap1.html>, which is
 well worth the read if you're into such things.
+
+Also, see also L<Imager>, L<Inline>.
 
 =head1 AUTHOR
 
@@ -119,7 +169,7 @@ free software, distributed under the same terms as Perl itself.
 
 =cut
 
-use 5.6.0;
+use 5.006;
 use strict;
 use warnings;
 
@@ -128,7 +178,7 @@ use vars qw($VERSION @ISA @EXPORT_OK);
 
 @ISA	   = qw( Exporter );
 @EXPORT_OK = qw( &dymax );
-$VERSION   = "0.10";
+$VERSION   = "0.11";
 
 # C code below mostly borrowed from
 #	http://www.rwgrayprojects.com/rbfnotes/maps/graymap6.html
@@ -137,7 +187,7 @@ $VERSION   = "0.10";
 use Inline C => Config => LIBS => "-lm";
 use Inline C => "DATA",
     NAME    => "Geo::Dymaxion",
-    VERSION => "0.10";
+    VERSION => "0.11";
 use Exporter;
 
 # Size of Fuller Earth map in unit triangle edges.
