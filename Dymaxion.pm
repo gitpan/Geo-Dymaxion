@@ -178,7 +178,7 @@ use vars qw($VERSION @ISA @EXPORT_OK);
 
 @ISA	   = qw( Exporter );
 @EXPORT_OK = qw( &dymax );
-$VERSION   = "0.11";
+$VERSION   = "0.12";
 
 # C code below mostly borrowed from
 #	http://www.rwgrayprojects.com/rbfnotes/maps/graymap6.html
@@ -187,7 +187,7 @@ $VERSION   = "0.11";
 use Inline C => Config => LIBS => "-lm";
 use Inline C => "DATA",
     NAME    => "Geo::Dymaxion",
-    VERSION => "0.11";
+    VERSION => "0.12";
 use Exporter;
 
 # Size of Fuller Earth map in unit triangle edges.

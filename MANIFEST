@@ -1,5 +1,10 @@
 Changes
 Dymaxion.pm
+inc/Module/Install.pm
+inc/Module/Install/Base.pm
+inc/Module/Install/Inline.pm
+inc/Module/Install/Makefile.pm
+inc/Module/Install/Metadata.pm
 Makefile.PL
 MANIFEST
 README

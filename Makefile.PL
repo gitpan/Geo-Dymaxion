@@ -1,10 +1,7 @@
 use 5.006;
-use Inline::MakeMaker;
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
-WriteInlineMakefile(
-    'NAME'		=> 'Geo::Dymaxion',
-    'VERSION_FROM'	=> 'Dymaxion.pm', # finds $VERSION
-    'PREREQ_PM'		=> { Inline => 0.40 }, # e.g., Module::Name => 1.1
-    'AUTHOR'             => 'Schuyler D. Erle <schuyler@nocat.net>'
-);
+use inc::Module::Install;
+name		( 'Geo-Dymaxion' );
+version_from	( 'Dymaxion.pm' );
+build_requires	( Inline => 0.40 );
+author		( 'Schuyler D. Erle <schuyler@nocat.net>' );
+&Inline->write;
